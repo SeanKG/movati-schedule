@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { fetchLocations, fetchSchedule } from './api';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      schedules: null
+    };
+  }
+
+  async componentDidMount() {
+    const locations = await fetchLocations();
+    const schedules = await fetchSchedule(locations['Trainyards']);
+    this.setState({ schedules });
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <header className="App-header">
+      { this.state.schedules ? JSON.stringify(this.state.schedules, null, 2) : `Mervati` }
+      </header>
       </div>
-    );
+      );
   }
 }
 
