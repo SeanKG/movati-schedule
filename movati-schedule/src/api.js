@@ -15,7 +15,7 @@ const fetchAllSchedules = async => {
 }
 
 export const fetchSchedule = async (location) => {
-	const times = getStartAndEndOfThisWeek();
+	const times = getSevenDaysFromNow();
 	const url = `${scheduleUrl}${callbackFn}${now()}&location=${location.code}&start=${times[0]}&end=${times[1]}`;
 	const scheduleResponse = await getAndParseJsonP(url);
 	return parseSchedule(scheduleResponse.aaData);
@@ -93,7 +93,7 @@ const parseSchedule = (scheduleJson) => {
 	return scheduleJson.map(schedule => {
 		const times = schedule[1].split("-").map(time => time.slice(0, -2));
 		const difficultyBits = schedule[2].split(" (");
-		const difficulty = difficultyBits.length > 1 ? difficultyBits[1].slice(0,-1) : "";
+		const difficulty = difficultyBits.length > 1 ? difficultyBits[1].slice(0, -1) : "";
 		return ({
 			date: new Date(schedule[0]).getTime(),
 			timeString: schedule[1],
@@ -110,14 +110,11 @@ const parseSchedule = (scheduleJson) => {
 	});
 }
 
-const getStartAndEndOfThisWeek = () => {
+const getSevenDaysFromNow = () => {
 	const now = new Date();
-	const first = now.getDate() - now.getDay();
-	const last = first + 6;
-	const firstTime = new Date(now.setDate(first)).getTime();
-	const lastTime = new Date(now.setDate(last)).getTime();
+	const sevenDaysFromNow = new Date().setDate(now.getDate() + 7);
 
-	return [(firstTime - (firstTime % 1000)) / 1000, (lastTime - (lastTime % 1000)) / 1000];
+	return [(now - (now % 1000)) / 1000, (sevenDaysFromNow - (sevenDaysFromNow % 1000)) / 1000];
 }
 
 const parseCategories = (categoriesJson) => {

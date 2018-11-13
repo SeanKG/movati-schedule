@@ -46,7 +46,7 @@ class Schedule extends Component {
 
 	buildChart() {
 		let chart = timelines();
-		d3.select("#schedule").append("svg").attr("width", 500).attr("height", 500).datum(testData).call(chart);
+		// d3.select("#schedule").append("svg").attr("width", 500).attr("height", 500).datum(testData).call(chart);
 	}
 
 	render() {
