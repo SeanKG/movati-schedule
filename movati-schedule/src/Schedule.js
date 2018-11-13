@@ -34,7 +34,6 @@ class Schedule extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
-		this.buildChart = this.buildChart.bind(this)
 	}
 
 	componentDidMount() {
@@ -44,14 +43,14 @@ class Schedule extends Component {
 		this.buildChart()
 	}
 
-	buildChart() {
+	buildChart = () =>{
 		let chart = timelines();
-		// d3.select("#schedule").append("svg").attr("width", 500).attr("height", 500).datum(testData).call(chart);
+		d3.select(this.svg).attr("width", 500).attr("height", 500).datum(testData).call(chart);
 	}
 
 	render() {
 		return (
-			<svg id='#schedule' width={500} height={500} ref={node => d3.select(node).call(this.buildChart)}></svg>
+			<svg id='#schedule' width={500} height={500} ref={node => this.svg = node}></svg>
 		);
 	}
 
