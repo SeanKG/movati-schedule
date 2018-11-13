@@ -4,31 +4,32 @@ import React, {
 import * as d3 from 'd3';
 import { timelines } from 'd3-timelines';
 
-const testData = [{
-	class: "pA",
-	label: "person a",
-	times: [{
-		"starting_time": 1355752800000,
-		"ending_time": 1355759900000
-	}, {
-		"starting_time": 1355767900000,
-		"ending_time": 1355774400000
-	}]
-}, {
-	class: "pB",
-	label: "person b",
-	times: [{
-		"starting_time": 1355759910000,
-		"ending_time": 1355761900000
-	}]
-}, {
-	class: "pC",
-	label: "person c",
-	times: [{
-		"starting_time": 1355761910000,
-		"ending_time": 1355763910000
-	}]
-}];
+
+// example sched:
+
+// category: "CARDIO & STRENGTH"
+// date: 1542085200000
+// difficulty: "E"
+// duration: "55"
+// endTime: 1542110100000
+// instructor: "Leanne W."
+// location: "Trainyards"
+// name: "20-20-20"
+// room: "Co-ed Studio"
+// startTime: 1542106800000
+// timeString: "6:00am-6:55am"
+
+function scheduleToTimeline( sched ){
+	return {
+		// class: "pA",
+		label: sched.room,
+		times: [{
+			"starting_time": sched.startTime,
+			"ending_time": sched.endTime
+		}]
+		}
+}
+
 
 class Schedule extends Component {
 	
@@ -39,17 +40,20 @@ class Schedule extends Component {
 	}
 	componentDidUpdate() {
 		this.buildChart();
-		console.log(this.state.schedules);
+		console.log(this.props.schedules);
 	}
 
 	buildChart = () =>{
 		const { schedules } = this.props;
 		if( schedules ){
+			const data = schedules
+							.filter(s => s.location === "Trainyards")
+							.map(scheduleToTimeline);
 			let chart = timelines();
 			d3.select(this.svg)
 				.attr("width", 500)
 				.attr("height", 500)
-				.datum(testData).call(chart);
+				.datum(data).call(chart);
 		}
 	}
 
