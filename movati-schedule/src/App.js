@@ -20,7 +20,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Schedule/>
+        <Schedule {...this.state}/>
         <pre className="App-header">
           { this.state.schedules ? JSON.stringify(this.state.schedules, null, 2) : `Mervati` }
         </pre>

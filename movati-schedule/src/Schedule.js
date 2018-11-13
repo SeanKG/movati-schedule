@@ -31,26 +31,31 @@ const testData = [{
 }];
 
 class Schedule extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
+	
+	state = {};
 
 	componentDidMount() {
-		this.buildChart()
+		this.buildChart();
 	}
 	componentDidUpdate() {
-		this.buildChart()
+		this.buildChart();
+		console.log(this.state.schedules);
 	}
 
 	buildChart = () =>{
-		let chart = timelines();
-		d3.select(this.svg).attr("width", 500).attr("height", 500).datum(testData).call(chart);
+		const { schedules } = this.props;
+		if( schedules ){
+			let chart = timelines();
+			d3.select(this.svg)
+				.attr("width", 500)
+				.attr("height", 500)
+				.datum(testData).call(chart);
+		}
 	}
 
 	render() {
 		return (
-			<svg id='#schedule' width={500} height={500} ref={node => this.svg = node}></svg>
+			<svg ref={node => this.svg = node}></svg>
 		);
 	}
 
