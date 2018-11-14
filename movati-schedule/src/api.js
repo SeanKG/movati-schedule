@@ -91,7 +91,7 @@ const parseSchedule = (scheduleJson) => {
 	// 		category: "STRENGTH"
 	// }
 	return scheduleJson.map(schedule => {
-		const times = schedule[1].split("-").map(time => time.slice(0, -2));
+		const times = schedule[1].split("-").map(time => time.replace(/(am|pm)/, " $&"));
 		const difficultyBits = schedule[2].split(" (");
 		const difficulty = difficultyBits.length > 1 ? difficultyBits[1].slice(0, -1) : "";
 		return ({
