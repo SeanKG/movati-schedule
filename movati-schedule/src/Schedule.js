@@ -24,11 +24,34 @@ function scheduleToTimeline( sched ){
 		// class: "pA",
 		sched,
 		label: sched.room,
+		class: sched.room,
 		times: [{
 			"starting_time": sched.startTime,
 			"ending_time": sched.endTime
 		}]
 		}
+}
+
+function schedulesReducer( all, sched ){
+
+	const { room, startTime, endTime } = sched;
+
+	if(!all[room]){
+		all[room] = {
+			sched,
+			label: sched.room,
+			class: sched.room,
+			times: []				
+		}
+	}
+
+	all[room].times.push({
+		"starting_time": startTime,
+		"ending_time": endTime
+	});
+
+	return all;
+
 }
 
 function timeFilter( sched ){
@@ -58,15 +81,17 @@ class Schedule extends Component {
 		const { schedules } = this.props;
 		if( schedules ){
 			const data = schedules
-				.filter(s => s.location === "Trainyards" && s.room === "Co-ed Studio")
+				.filter(s => s.location === "Trainyards")
+				// .filter(s => s.location === "Trainyards" && s.room === "Co-ed Studio")
 				.filter(timeFilter)
-				.map(scheduleToTimeline);
+				.reduce(schedulesReducer, {});
+				// .map(scheduleToTimeline);
 				console.log(data);
-			let chart = timelines();
+			let chart = timelines().stack();
 			d3.select(this.svg)
 				.attr("width", window.innerWidth)
-				.attr("height", 300)
-				.datum(data).call(chart);
+				.attr("height", 500)
+				.datum(Object.keys(data).map(k => data[k])).call(chart);
 
 			// this.setState({ data });
 		}
