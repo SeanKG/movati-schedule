@@ -34,7 +34,7 @@ function scheduleToTimeline( sched ){
 
 function schedulesReducer( all, sched ){
 
-	const { room, startTime, endTime } = sched;
+	const { room, startTime, endTime, name } = sched;
 
 	if(!all[room]){
 		all[room] = {
@@ -47,7 +47,8 @@ function schedulesReducer( all, sched ){
 
 	all[room].times.push({
 		"starting_time": startTime,
-		"ending_time": endTime
+		"ending_time": endTime,
+		label: name
 	});
 
 	return all;
